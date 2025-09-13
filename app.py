@@ -101,9 +101,18 @@ def top_keywords(texts: List[str], top_n: int = 40) -> List[Tuple[str, float]]:
     cleaned = [remove_stop_punct(t) for t in texts if t and t.strip()]
     if not cleaned:
         return []
-    vec = TfidfVectorizer(ngram_range=(1, 2), min_df=1, max_df=0.9)
+
+    n_docs = len(cleaned)
+    # Avoid ValueError when n_docs == 1: with min_df=1 (count) and max_df as fraction < 1
+    safe_max_df = 1.0 if n_docs == 1 else 0.9
+
+    vec = TfidfVectorizer(ngram_range=(1, 2), min_df=1, max_df=safe_max_df)
     X = vec.fit_transform(cleaned)
-    # Aggregate by mean TF-IDF across docs
+
+    # Guard: if vocabulary ended up empty for any reason
+    if X.shape[1] == 0:
+        return []
+
     scores = np.asarray(X.mean(axis=0)).ravel()
     features = np.array(vec.get_feature_names_out())
     top_idx = scores.argsort()[::-1][:top_n]
