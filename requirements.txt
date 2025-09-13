@@ -1,8 +1,8 @@
-streamlit==1.37.1
-nltk==3.8.1
-scikit-learn==1.4.2
-numpy==1.26.4
-PyMuPDF==1.24.7
-python-docx==1.1.2
-beautifulsoup4==4.12.3
-requests==2.32.3
+# Keep these loose or modern so Cloud can pick prebuilt wheels
+streamlit>=1.37
+scikit-learn>=1.7   # latest stable line supports NumPy 2.x
+nltk>=3.8
+PyMuPDF>=1.24
+python-docx>=1.1
+beautifulsoup4>=4.12
+requests>=2.31
