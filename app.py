@@ -115,7 +115,7 @@ def similarity_score(cv_text: str, job_texts: List[str]) -> float:
     if not job_texts:
         return 0.0
     docs = [remove_stop_punct(cv_text), remove_stop_punct(" \n".join(job_texts))]
-    vec = TfidfVectorizer(ngram_range=(1,2), min_df=1, max_df=0.95)
+    vec = TfidfVectorizer(ngram_range=(1,2), min_df=1, max_df=1.0)
     X = vec.fit_transform(docs)
     sim = cosine_similarity(X[0:1], X[1:2])[0,0]
     return float(sim)
